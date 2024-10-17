@@ -1,6 +1,7 @@
 
 import User from '../models/User.js';
 import Joi from 'joi';
+import { Expense } from '../models/Expense.js';
 
 exports.createUser = async (req, res) => {
   const schema = Joi.object({
@@ -30,4 +31,44 @@ exports.getUser = async (req, res) => {
       res.status(500).send(err.message);
     }
   };
+
+  export const getUserExpenses = async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const expenses = await Expense.find({ 'participants.user': userId });
+      
+      const totalOwed = expenses.reduce((total, expense) => {
+        const participant = expense.participants.find(p => p.user == userId);
+        return total + (participant ? participant.owedAmount : 0);
+      }, 0);
+  
+      res.send({ expenses, totalOwed });
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
+  };
+
+  export const getAllExpenses = async (req, res) => {
+    try {
+      const expenses = await Expense.find().populate('participants.user');
+      
+      // Calculate overall expenses for each user
+      const userBalances = {};
+      expenses.forEach(expense => {
+        expense.participants.forEach(participant => {
+          const userId = participant.user._id;
+          if (!userBalances[userId]) {
+            userBalances[userId] = { user: participant.user, totalOwed: 0 };
+          }
+          userBalances[userId].totalOwed += participant.owedAmount;
+        });
+      });
+  
+      res.send(userBalances);
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
+  };
+  
+  
   
