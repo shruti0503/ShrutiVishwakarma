@@ -7,7 +7,7 @@ const expenseSchema = new mongoose.Schema({
   splitType: { type: String, enum: ['equal', 'exact', 'percentage'], required: true },
   participants: [
     {
-      email: { type: String},
+      user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },  // Reference to User model
       owedAmount: { type: Number }
     }
   ],
