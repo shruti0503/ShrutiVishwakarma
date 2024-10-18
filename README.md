@@ -155,9 +155,4 @@ server.js               // Entry point of the application
 .env                    // Environment variables file
 ```
 
-### License
-This project is open-source and available under the MIT License.
 
----
-
-This README provides a comprehensive guide for setting up, running, and using your daily expenses sharing application with JWT authentication.
