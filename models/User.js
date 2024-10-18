@@ -6,8 +6,21 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   mobile: { type: String, required: true },
   password: { type: String, required: true },
-  balance:{type:Number, required: false}
+  balance: { type: Number, default: 0 },  // Default to 0 if not specified
+  owned: [
+    {
+      user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },  // Reference to users who owe this user
+      pay: { type: Number, required: true }  // Amount owed by others
+    }
+  ],
+  owes: [
+    {
+      user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },  // Reference to users this user owes money to
+      pay: { type: Number, required: true }  // Amount this user owes to others
+    }
+  ]
 });
+
 
 // Hash the password before saving the user
 userSchema.pre('save', async function (next) {
