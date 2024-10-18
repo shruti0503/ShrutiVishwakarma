@@ -10,6 +10,8 @@ The application also includes user authentication, expense management, and the a
   - Split expenses equally, by exact amounts, or by percentage.
 - **Balance Sheet**: Generate and download a balance sheet that summarizes how much each user owes or is owed.
 - **Middleware**: Authentication middleware protects routes and ensures that only logged-in users can access the expense routes.
+- **Input Validation** : User input is validated to ensure data integrity and correctness
+  ![Screenshot 2024-10-18 at 4 27 50 PM](https://github.com/user-attachments/assets/6037c8ea-98f8-4d49-8ed2-9d315be8a511)
 
 ## Technologies Used
 - **Node.js**
