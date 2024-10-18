@@ -32,17 +32,17 @@ export const addExpense = async (req, res) => {
   }
 
   try {
-    // Save the new expense
+    
     const expense = new Expense({
       description,
       amount,
       splitType,
       participants: calculatedParticipants,
-      payer // Include the payer of the expense
+      payer 
     });
     await expense.save();
 
-    // Update balances and owed/own lists for participants and payer
+   
     for (const participant of calculatedParticipants) {
       const user = await User.findById(participant.user);
       const payerUser = await User.findById(payer);
@@ -52,13 +52,13 @@ export const addExpense = async (req, res) => {
       }
 
       if (user._id.toString() !== payer) {
-        // Update the 'owes' field for participants (this user owes money to the payer)
+        
         user.owes.push({ user: payer, pay: participant.owedAmount });
         payerUser.owned.push({ user: user._id, pay: participant.owedAmount });
         
-        // Update balances
-        user.balance = (user.balance || 0) - participant.owedAmount;  // Deduct the amount the user owes
-        payerUser.balance = (payerUser.balance || 0) + participant.owedAmount;  // Increase the payer's balance
+     
+        user.balance = (user.balance || 0) - participant.owedAmount;  
+        payerUser.balance = (payerUser.balance || 0) + participant.owedAmount;  
       }
       
       await user.save();
